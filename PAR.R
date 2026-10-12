@@ -118,3 +118,45 @@ ref %$%
 PAR1 %$% sum(PAR) # 1567956
 PAR4 %$% sum(PAR) # 1571994
 PAR5 %$% sum(PAR) # 1616051
+
+# Check calibration
+PAR1_c <- here("PAR", "PAR1_Calibrated.csv") %>%
+  read_csv() %>%
+  mutate(Datetime = dmy_hm(dateTime)) %>% 
+  rename(PAR = data1, Temp = data2) %T>%
+  print()
+
+PAR4_c <- here("PAR", "PAR4_Calibrated.csv") %>%
+  read_csv() %>%
+  mutate(Datetime = dmy_hm(dateTime)) %>%
+  rename(PAR = data1, Temp = data2) %T>%
+  print()
+
+PAR5_c <- here("PAR", "PAR5_Calibrated.csv") %>%
+  read_csv() %>%
+  mutate(Datetime = dmy_hm(dateTime)) %>%
+  rename(PAR = data1, Temp = data2) %T>%
+  print()
+
+PAR1_c %>%
+  full_join(ref, by = "Datetime", suffix = c("", "_ref")) %>%
+  ggplot() +
+    geom_point(aes(Datetime, PAR)) +
+    geom_line(aes(Datetime, PAR_ref), colour = "darkorange") +
+    theme_minimal()
+
+PAR4_c %>%
+  full_join(ref, by = "Datetime", suffix = c("", "_ref")) %>%
+  ggplot() +
+    geom_point(aes(Datetime, PAR)) +
+    geom_line(aes(Datetime, PAR_ref), colour = "darkorange") +
+    theme_minimal()
+  
+PAR5_c %>%
+  full_join(ref, by = "Datetime", suffix = c("", "_ref")) %>%
+  ggplot() +
+    geom_point(aes(Datetime, PAR)) +
+    geom_line(aes(Datetime, PAR_ref), colour = "darkorange") +
+    theme_minimal()
+# Looks pretty good! Logger 1 just seems to have missed that second spike.
+
